@@ -9,9 +9,15 @@ const (
 	nilMessage = "success"
 )
 
+type Error interface {
+	Code() int32
+	Error() string
+}
+
 type KonoError struct {
 	ErrCode int32
 	ErrMsg  string
+	cause   error
 }
 
 func (e *KonoError) Error() string {
@@ -28,32 +34,24 @@ func (e *KonoError) Code() int32 {
 	return e.ErrCode
 }
 
-func (e *KonoError) ResetErrMsg(msg string) *KonoError {
+func (e *KonoError) ResetMsg(msg string) *KonoError {
 	if e != nil {
 		return New(e.Code(), msg)
 	}
 	return e
 }
 
-func (e *KonoError) JoinErrMsg(err Error) *KonoError {
+func (e *KonoError) WithCause(err error) *KonoError {
 	if e != nil {
-		newMsg := fmt.Sprintf("%v|%v", e.ErrMsg, err.Error())
+		e.cause = err
+		newMsg := fmt.Sprintf("%v,caused by %v", e.ErrMsg, err.Error())
 		return New(e.Code(), newMsg)
 	}
 	return e
 }
 
 func New(code int32, message string) *KonoError {
-	err := &KonoError{
-		ErrCode: code,
-		ErrMsg:  message,
-	}
-	return err
-}
-
-type Error interface {
-	Code() int32
-	Error() string
+	return &KonoError{ErrCode: code, ErrMsg: message}
 }
 
 func IsEqual(a, b Error) bool {

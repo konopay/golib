@@ -64,7 +64,7 @@ func TestKonoError_JoinErrMsg(t *testing.T) {
 			args: args{
 				err: DbError,
 			},
-			want: New(1, "outer_error|1:db error"),
+			want: New(1, "outer_error,caused by 1:db error"),
 		},
 	}
 	for _, tt := range tests {
@@ -73,7 +73,7 @@ func TestKonoError_JoinErrMsg(t *testing.T) {
 				ErrCode: tt.fields.ErrCode,
 				ErrMsg:  tt.fields.ErrMsg,
 			}
-			if got := e.JoinErrMsg(tt.args.err); !reflect.DeepEqual(got, tt.want) {
+			if got := e.WithCause(tt.args.err); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("JoinErrMsg() = %v, want %v", got, tt.want)
 			}
 		})
