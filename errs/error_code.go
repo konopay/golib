@@ -12,3 +12,10 @@ var (
 	HttpRemoteError     = New(0006, "call http error")
 	TxnNotExist         = New(0007, "txn not exist")
 )
+
+// internal system error
+var (
+	DbDuplicatedError = New(90000000, "db creation duplicated")
+	JsonError         = New(90000001, "json operation error")
+	KeyNotFoundError  = New(90000002, "key not found error")
+)
