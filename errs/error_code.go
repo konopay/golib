@@ -15,7 +15,9 @@ var (
 
 // internal system error
 var (
-	DbDuplicatedError = New(90000000, "db creation duplicated")
-	JsonError         = New(90000001, "json operation error")
-	KeyNotFoundError  = New(90000002, "key not found error")
+	DbDuplicatedError   = New(90000000, "db creation duplicated")
+	JsonError           = New(90000001, "json operation error")
+	KeyNotFoundError    = New(90000002, "key not found error")
+	InvalidStateMachine = New(90000003, "invalid status machine")
+	NotifyFail          = New(90000004, "notify fail")
 )
