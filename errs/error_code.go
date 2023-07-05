@@ -1,16 +1,17 @@
 package errs
 
 var (
-	Success = New(0000, "success")
+	Success = New(0, "success")
 
 	// 通用错误
-	ParamError          = New(0001, "param error")
-	DbError             = New(0002, "db error")
-	AmountCurrencyError = New(0003, "amount currency error")
-	SystemError         = New(0004, "server error")
-	RpcRemoteError      = New(0005, "call remote rpc error")
-	HttpRemoteError     = New(0006, "call http error")
-	TxnNotExist         = New(0007, "txn not exist")
+	ParamError          = New(1, "param error")
+	DbError             = New(2, "db error")
+	AmountCurrencyError = New(3, "amount currency error")
+	SystemError         = New(4, "server error")
+	RpcRemoteError      = New(5, "call remote rpc error")
+	HttpRemoteError     = New(6, "call http error")
+	TxnNotExist         = New(7, "txn not exist")
+	InsufficientBalance = New(8, "insufficient balance")
 )
 
 // internal system error
