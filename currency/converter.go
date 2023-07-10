@@ -13,23 +13,27 @@ func ConvertMinor2Micro(m string) (int64, errs.Error) {
 	return value.Mul(decimal.New(1, 6)).IntPart(), nil
 }
 
-func ConvertMicroToMinor(micro int64, friction int32) string {
-	return decimal.New(micro, -6).StringFixedBank(friction)
-}
-
-func ConvertMicroToMinorDecimal(micro int64, friction int32) decimal.Decimal {
-	return decimal.New(micro, -6).RoundBank(friction)
-}
-
-func CurrencyFriction(rules map[string]int32, currency string) (int32, errs.Error) {
-	friction, ok := rules[currency]
+// ConvertMicroToExternalMinor 指定external currency的rule，在第三方转义场景使用
+func ConvertMicroToExternalMinor(micro int64, currency string, fractionRules map[string]int32) (string, errs.Error) {
+	fraction, ok := fractionRules[currency]
 	if !ok {
-		return 0, errs.AmountCurrencyError.ResetMsg("unknown currency")
+		return "", errs.AmountCurrencyError.ResetMsg("unknown currency")
 	}
-	return friction, nil
+	return decimal.New(micro, -6).StringFixedBank(fraction), nil
 }
 
-// TODO: add standard rule mapping
-func ISOCurrencyFriction(currency string) (int32, errs.Error) {
-	return 0, errs.AmountCurrencyError
+func ConvertMicroToMinor(micro int64, currency string) (string, errs.Error) {
+	fraction, err := konoCurrencyFraction(currency)
+	if err != nil {
+		return "", err
+	}
+	return decimal.New(micro, -6).StringFixedBank(fraction), nil
+}
+
+func ConvertMicroToMinorDecimal(micro int64, currency string) (decimal.Decimal, errs.Error) {
+	fraction, err := konoCurrencyFraction(currency)
+	if err != nil {
+		return decimal.Decimal{}, err
+	}
+	return decimal.New(micro, -6).RoundBank(fraction), nil
 }
