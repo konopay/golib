@@ -22,4 +22,5 @@ var (
 	InvalidStateMachine = New(90000003, "invalid status machine")
 	NotifyFail          = New(90000004, "notify fail")
 	NoValidChannelFound = New(90000005, "channel not found")
+	DataNotFoundError   = New(90000006, "data not found in db")
 )
