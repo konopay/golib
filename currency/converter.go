@@ -13,13 +13,13 @@ func ConvertMinor2Micro(m string) (int64, errs.Error) {
 	return value.Mul(decimal.New(1, 6)).IntPart(), nil
 }
 
-// CurrencyFraction 指定currency的rule，在第三方转义场景使用
-func CurrencyFraction(rules map[string]int32, currency string) (int32, errs.Error) {
-	fraction, ok := rules[currency]
+// ConvertMicroToExternalMinor 指定external currency的rule，在第三方转义场景使用
+func ConvertMicroToExternalMinor(micro int64, currency string, fractionRules map[string]int32) (string, errs.Error) {
+	fraction, ok := fractionRules[currency]
 	if !ok {
-		return 0, errs.AmountCurrencyError.ResetMsg("unknown currency")
+		return "", errs.AmountCurrencyError.ResetMsg("unknown currency")
 	}
-	return fraction, nil
+	return decimal.New(micro, -6).StringFixedBank(fraction), nil
 }
 
 func ConvertMicroToMinor(micro int64, currency string) (string, errs.Error) {
