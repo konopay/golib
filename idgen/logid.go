@@ -1,6 +1,9 @@
 package idgen
 
 import (
+	"context"
+	"github.com/bytedance/gopkg/cloud/metainfo"
+	"github.com/cloudwego/kitex/pkg/endpoint"
 	"time"
 )
 
@@ -64,4 +67,15 @@ func (ld *LogID) GetID() uint64 {
 	ret = ret | ((ts << 16) & secondPosition)
 	ret = ret | (inc & incPosition)
 	return ret
+}
+
+func AddLogIdKiteXMW(next endpoint.Endpoint) endpoint.Endpoint {
+	return func(ctx context.Context, req, resp interface{}) (err error) {
+		logid, ok := metainfo.GetPersistentValue(ctx, "logid")
+		if !ok || logid == "" {
+			ctx = metainfo.WithPersistentValue(ctx, "logid", strconv.FormatUint(NewLogID().GetID(), 10))
+		}
+		
+		return next(ctx, req, resp)
+	}
 }
