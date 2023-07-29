@@ -1,1 +1,1 @@
-# Internal library written in go
+# Internal library for go
