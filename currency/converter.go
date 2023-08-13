@@ -13,6 +13,11 @@ func ConvertMinor2Micro(m string) (int64, errs.Error) {
 	return value.Mul(decimal.New(1, 6)).IntPart(), nil
 }
 
+func ConvertMinorFloat2Micro(m float64) int64 {
+	value := decimal.NewFromFloat(m)
+	return value.Mul(decimal.New(1, 6)).IntPart()
+}
+
 // ConvertMicroToExternalMinor 指定external currency的rule，在第三方转义场景使用
 func ConvertMicroToExternalMinor(micro int64, currency string, fractionRules map[string]int32) (string, errs.Error) {
 	fraction, ok := fractionRules[currency]
@@ -28,6 +33,10 @@ func ConvertMicroToMinor(micro int64, currency string) (string, errs.Error) {
 		return "", err
 	}
 	return decimal.New(micro, -6).StringFixedBank(fraction), nil
+}
+
+func ConvertMicroToMinorFloat(micro int64) float64 {
+	return decimal.New(micro, -6).InexactFloat64()
 }
 
 func ConvertMicroToMinorDecimal(micro int64, currency string) (decimal.Decimal, errs.Error) {
