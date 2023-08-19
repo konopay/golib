@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	logIdPersistentKey        = "logid"
+	LogIdPersistentKey        = "logid"
 	machinePosition    uint64 = 0xffff000000000000
 	pidCodePosition    uint64 = 0x0000ff0000000000
 	secondPosition     uint64 = 0x000000ffffff0000
@@ -68,11 +68,14 @@ func (ld *LogID) GetID() uint64 {
 	return ret
 }
 
+// AddLogIdKiteXMW
+//
+// 在 RPC Client 调用时 检查log-id 如果 不存在 则自动注入
 func AddLogIdKiteXMW(next endpoint.Endpoint) endpoint.Endpoint {
 	return func(ctx context.Context, req, resp interface{}) (err error) {
-		logid, ok := metainfo.GetPersistentValue(ctx, logIdPersistentKey)
+		logid, ok := metainfo.GetPersistentValue(ctx, LogIdPersistentKey)
 		if !ok || logid == "" {
-			ctx = metainfo.WithPersistentValue(ctx, logIdPersistentKey, strconv.FormatUint(NewLogID().GetID(), 10))
+			ctx = metainfo.WithPersistentValue(ctx, LogIdPersistentKey, strconv.FormatUint(NewLogID().GetID(), 10))
 		}
 
 		return next(ctx, req, resp)
@@ -83,7 +86,7 @@ func AddLogIdKiteXMW(next endpoint.Endpoint) endpoint.Endpoint {
 //
 // 从 ctx 中获取log-id 如果不存在 返回默认的id
 func LogIdOrDefault(ctx context.Context) string {
-	logid, ok := metainfo.GetPersistentValue(ctx, logIdPersistentKey)
+	logid, ok := metainfo.GetPersistentValue(ctx, LogIdPersistentKey)
 	if !ok {
 		return "unknown-logid" + " "
 	}
