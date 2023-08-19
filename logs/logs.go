@@ -33,6 +33,6 @@ func CtxDebugf(ctx context.Context, format string, v ...interface{}) {
 //
 // 追加log-id到日志内容中 方便搜索上下文
 func AppendLogId(ctx context.Context, format string) string {
-	logId := idgen.GetLogIdOrDefaultFromContext(ctx)
+	logId := idgen.LogIdOrDefault(ctx)
 	return fmt.Sprintf("%s %s", logId, format)
 }

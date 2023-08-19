@@ -79,10 +79,10 @@ func AddLogIdKiteXMW(next endpoint.Endpoint) endpoint.Endpoint {
 	}
 }
 
-// GetLogIdOrDefaultFromContext
+// LogIdOrDefault
 //
 // 从 ctx 中获取log-id 如果不存在 返回默认的id
-func GetLogIdOrDefaultFromContext(ctx context.Context) string {
+func LogIdOrDefault(ctx context.Context) string {
 	logid, ok := metainfo.GetPersistentValue(ctx, logIdPersistentKey)
 	if !ok {
 		return "unknown-logid"
