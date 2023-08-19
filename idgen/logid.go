@@ -2,23 +2,22 @@ package idgen
 
 import (
 	"context"
-	"github.com/bytedance/gopkg/cloud/metainfo"
-	"github.com/cloudwego/kitex/pkg/endpoint"
-	"time"
-)
-
-import (
 	"hash/crc32"
 	"os"
 	"strconv"
 	"sync/atomic"
+	"time"
+
+	"github.com/bytedance/gopkg/cloud/metainfo"
+	"github.com/cloudwego/kitex/pkg/endpoint"
 )
 
 const (
-	machinePosition uint64 = 0xffff000000000000
-	pidCodePosition uint64 = 0x0000ff0000000000
-	secondPosition  uint64 = 0x000000ffffff0000
-	incPosition     uint64 = 0x000000000000ffff
+	logIdPersistentKey        = "logid"
+	machinePosition    uint64 = 0xffff000000000000
+	pidCodePosition    uint64 = 0x0000ff0000000000
+	secondPosition     uint64 = 0x000000ffffff0000
+	incPosition        uint64 = 0x000000000000ffff
 )
 
 var (
@@ -71,11 +70,23 @@ func (ld *LogID) GetID() uint64 {
 
 func AddLogIdKiteXMW(next endpoint.Endpoint) endpoint.Endpoint {
 	return func(ctx context.Context, req, resp interface{}) (err error) {
-		logid, ok := metainfo.GetPersistentValue(ctx, "logid")
+		logid, ok := metainfo.GetPersistentValue(ctx, logIdPersistentKey)
 		if !ok || logid == "" {
-			ctx = metainfo.WithPersistentValue(ctx, "logid", strconv.FormatUint(NewLogID().GetID(), 10))
+			ctx = metainfo.WithPersistentValue(ctx, logIdPersistentKey, strconv.FormatUint(NewLogID().GetID(), 10))
 		}
-		
+
 		return next(ctx, req, resp)
 	}
+}
+
+// GetLogIdOrDefaultFromContext
+//
+// 从 ctx 中获取log-id 如果不存在 返回默认的id
+func GetLogIdOrDefaultFromContext(ctx context.Context) string {
+	logid, ok := metainfo.GetPersistentValue(ctx, logIdPersistentKey)
+	if !ok {
+		return "unknown-logid"
+	}
+
+	return logid
 }
