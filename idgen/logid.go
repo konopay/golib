@@ -85,8 +85,8 @@ func AddLogIdKiteXMW(next endpoint.Endpoint) endpoint.Endpoint {
 func LogIdOrDefault(ctx context.Context) string {
 	logid, ok := metainfo.GetPersistentValue(ctx, logIdPersistentKey)
 	if !ok {
-		return "unknown-logid"
+		return "unknown-logid" + " "
 	}
 
-	return logid
+	return logid + " "
 }
