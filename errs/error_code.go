@@ -12,6 +12,8 @@ var (
 	HttpRemoteError     = New(6, "call http error")
 	TxnNotExist         = New(7, "txn not exist")
 	InsufficientBalance = New(8, "insufficient balance")
+	ChannelApiError     = New(9, "channel api error")
+	ChannelBizError     = New(10, "channel biz error")
 )
 
 // internal system error
