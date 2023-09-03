@@ -14,6 +14,7 @@ var (
 	InsufficientBalance = New(8, "insufficient balance")
 	ChannelApiError     = New(9, "channel api error")
 	ChannelBizError     = New(10, "channel biz error")
+	InvalidUserPI       = New(11, "invalid user instrument details")
 )
 
 // internal system error
