@@ -15,6 +15,8 @@ var (
 	ChannelApiError     = New(9, "channel api error")
 	ChannelBizError     = New(10, "channel biz error")
 	InvalidUserPI       = New(11, "invalid user instrument details")
+	EncryptError        = New(12, "Encrypt Error")
+	DecryptError        = New(13, "Decrypt Error")
 )
 
 // internal system error
