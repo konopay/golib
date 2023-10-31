@@ -30,4 +30,5 @@ var (
 	NoValidChannelFound  = New(90000005, "channel not found")
 	DataNotFoundError    = New(90000006, "data not found in db")
 	ShouldNotHappenError = New(90000007, "internal error should not happen")
+	UnknownChannelStatus = New(90000008, "unknown channel status")
 )
